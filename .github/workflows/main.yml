@@ -1,4 +1,4 @@
-name: Deploy Backend to Render
+name: Build Frontend + Backend Docker and Push
 
 on:
   push:
@@ -6,50 +6,61 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # 2️⃣ Set up Node.js for frontend
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
 
+      # 3️⃣ Build frontend
       - name: Build frontend
         run: |
           cd frontend
           npm install
           npm run build
-          # Копируем build в backend, чтобы Django мог использовать статику
-          mkdir -p ../backend/frontend/
           cp -r build ../backend/frontend/
 
+      # 4️⃣ Set up Python for backend
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
-      - name: Install Python dependencies
+      # 5️⃣ Install backend dependencies
+      - name: Install backend dependencies
         run: |
           cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Django migrations and collect static files
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      # 6️⃣ Run migrations and collect static files
+      - name: Migrate and collect static
         run: |
           cd backend
           python manage.py migrate --noinput
           python manage.py collectstatic --noinput
 
-      - name: Trigger Render deploy
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      # 7️⃣ Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      # 8️⃣ Build Docker image
+      - name: Build Docker image
         run: |
-          curl -X POST https://api.render.com/deploy/srv-d43uemjipnbc73cbothg \
-          -H "Authorization: Bearer $RENDER_API_KEY"
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/taski-backend:latest .
+
+      # 9️⃣ Push Docker image
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/taski-backend:latest
