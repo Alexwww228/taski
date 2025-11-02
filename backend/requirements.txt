@@ -1,4 +1,5 @@
-Django==3.2.3
-djangorestframework==3.12.4
-django-cors-headers==3.13.0
-python-decouple
+Django==4.2
+djangorestframework==3.14
+django-cors-headers==3.14
+python-decouple==3.8
+setuptools
