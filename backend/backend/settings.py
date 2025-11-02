@@ -8,6 +8,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-cg6*%6d51ef8f#4!r3*$v
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
+STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'build' / 'static']
 
 # Application definition
 INSTALLED_APPS = [
@@ -38,7 +39,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'frontend' / 'build'],
+        'DIRS': [BASE_DIR / 'frontend' / 'src'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
