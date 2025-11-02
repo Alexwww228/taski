@@ -5,9 +5,8 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$')
-DEBUG = False
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='taski-g67x.onrender.com').split(',')
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
