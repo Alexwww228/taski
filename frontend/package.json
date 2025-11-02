@@ -4,9 +4,9 @@
   "description": "Taski is a task-planning application—a full-stack web app featuring a React frontend, a Django REST backend, and PostgreSQL as the database.   This version runs locally without Docker, making it a straightforward environment for development and study.",
   "main": "index.js",
   "scripts": {
-    "start": "cd frontend && react-scripts start",
-    "build": "cd frontend && react-scripts build",
-    "test": "cd frontend && react-scripts test"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test"
   },
   "keywords": [],
   "author": "",
