@@ -106,9 +106,7 @@ STATIC_URL = '/static_backend/'
 STATIC_ROOT = BASE_DIR / 'static_backend'
 
 # settings.py
-STATICFILES_DIRS = [
-    BASE_DIR / "frontend/build/static",
-]
+STATICFILES_DIRS = [BASE_DIR / "frontend" / "build" / "static"]
 
 
 # Default primary key field type
